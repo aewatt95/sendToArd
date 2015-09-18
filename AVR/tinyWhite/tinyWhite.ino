@@ -36,17 +36,21 @@ void loop() {
    unsigned long value = mySwitch.getReceivedValue(); // Copy the value 
    
    
-  //Signal in Form: [ID] [MODE] [VALUE1] [VALUE2] [VALUE3]
-  //For example      1    1      255      025        -  		
-  //                 2    2      125      012       000  		//not implemented yet
-  //First Bit is ID of the module, in this case 1 => 10000000
+  //Signal in Form: 	[BYTE1] 	[BYTE2] 	[BYTE3] 	[BYTE4]
+  //					id+mode		var1		var2		var3
+  //maxValues		   	[16][16]	[256]		[256]		[256] 		
+  
+  byte id = value >> 28;
+  byte mode = (value << 4) >> 28;
+  byte varOne = (value << 8) >> 24;
+  byte varTwo = (value << 16) >> 24;
+  byte varThree = (value << 24) >> 24;
    
-   if (value >= 10000000)
+  
+  
+   if (id == 1)
    { 
-   
-     //using combinations of division and modulo to read different parts of recieved code 
-     int mode = (value/1000000)%10;
-     switch(mode){
+		switch(mode){
 	 
        //Mode: OFF
       case 0:{
@@ -58,11 +62,11 @@ void loop() {
 	  
       //Mode: FIXED
       case 1:{
-         warmValue = (value/1000)%1000; 
-         coldValue = (value%1000);
+         warmValue = var1; 
+         coldValue = var2;
 		 
          //Soft change: Values reached in 1 second
-	 //TODO: Move to the main loop (No Code detecting while fading)
+		//TODO: Move to the main loop (No Code detecting while fading)
          for(int i = 0; i < 100; i++){
            analogWrite(wPin, lastWValue + ((warmValue-lastWValue)/100.0f)*i);
            analogWrite(cPin, lastCValue + ((coldValue-lastCValue)/100.0f)*i);
