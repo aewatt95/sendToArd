@@ -1,0 +1,10 @@
+!/bin/bash
+
+while true
+do
+ sudo ./sendToArd 0 HIGH
+ sleep 1
+ sudo ./sendToArd 0 LOW
+ sleep 1
+done
+
