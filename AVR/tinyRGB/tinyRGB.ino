@@ -1,6 +1,3 @@
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////UNTESTED////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
 /*
  Author: Andre Eberhard
  Description: 	This program receive commands from an Raspberry PI
@@ -170,11 +167,12 @@ void loop() {
       lastBValue = bValue;
 
       /*
+       //Using Pin 4 on ATTiny85 for pwm poutput
        // Timer 1
        TCCR1 = _BV (CS10);           // no prescaler
        GTCCR = _BV (COM1B1) | _BV (PWM1B);  //  clear OC1B on compare
        OCR1B = bValue;
-       OCR1C = 127;
+       OCR1C = 255;
        */
       analogWrite(bPin, bValue);
       analogWrite(rPin, rValue);
@@ -182,6 +180,8 @@ void loop() {
     }  // end of setup
   }
 
+
+  //Convert a value of the HSV Color model into rgbValues... the simpel way... without trigonometrical function... for reason
   void calcHue(float degree) {
     if (degree >= 360.0f) degree = degree - (((int)(degree / 360)) * 360);
     if (degree < 60) {
@@ -220,6 +220,7 @@ void loop() {
   unsigned long hueTime = 0;
   float hue = 0.0f;
 
+  //Atumatic color change
   void hueRun() {
     if (millis() - hueTime > 10)
     {
