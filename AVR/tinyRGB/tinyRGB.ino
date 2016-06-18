@@ -100,7 +100,7 @@ void loop() {
         //Mode: AUTO:---------------------------------------------------------------------------
         case 2: {
             changeSpeed = valueOne;
-            localMode = 2
+            localMode = 2;
             break;
           }
 
